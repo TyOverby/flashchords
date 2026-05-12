@@ -45,9 +45,12 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
   const handleClick = useCallback((e) => {
     if (!interactive || !onPositionChange) return;
     const svg = e.currentTarget;
-    const rect = svg.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / scale;
-    const y = (e.clientY - rect.top) / scale;
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX;
+    pt.y = e.clientY;
+    const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+    const x = svgPt.x;
+    const y = svgPt.y;
 
     // Find closest string
     let closestString = 0;
@@ -90,6 +93,30 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
         onClick=${handleClick}
         style=${{ cursor: interactive ? 'pointer' : 'default' }}
       >
+        <!-- Debug hit zones -->
+        ${interactive && Array.from({length: NUM_STRINGS}, (_, s) => {
+          const sx = stringX(s);
+          const halfSpacing = STRING_SPACING / 2;
+          const maxDist = STRING_SPACING * 0.7;
+          const xLeft = s === 0 ? sx - maxDist : sx - halfSpacing;
+          const xRight = s === NUM_STRINGS - 1 ? sx + maxDist : sx + halfSpacing;
+          const w = xRight - xLeft;
+          const rects = [];
+          // Mute/open zone (above nut)
+          rects.push(html`<rect key=${"dbg-mute-"+s} x=${xLeft} y=${0} width=${w} height=${NUT_Y}
+            fill=${s % 2 === 0 ? "rgba(0,100,255,0.15)" : "rgba(255,100,0,0.15)"}
+            stroke="rgba(255,255,255,0.3)" strokeWidth="0.5" />`);
+          // Fret zones
+          for (let f = 1; f <= NUM_FRETS; f++) {
+            const yTop = f === 1 ? NUT_Y : (fretY(f-1) + fretY(f)) / 2;
+            const yBottom = f === NUM_FRETS ? HEIGHT : (fretY(f) + fretY(f+1)) / 2;
+            rects.push(html`<rect key=${"dbg-fret-"+s+"-"+f} x=${xLeft} y=${yTop} width=${w} height=${yBottom - yTop}
+              fill=${(s + f) % 2 === 0 ? "rgba(0,100,255,0.15)" : "rgba(255,100,0,0.15)"}
+              stroke="rgba(255,255,255,0.3)" strokeWidth="0.5" />`);
+          }
+          return rects;
+        })}
+
         <!-- Nut -->
         <line x1=${stringX(0)} y1=${NUT_Y} x2=${stringX(NUM_STRINGS-1)} y2=${NUT_Y}
               stroke="#ccc" strokeWidth="4" />
