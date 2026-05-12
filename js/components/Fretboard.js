@@ -123,18 +123,16 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
                               fontSize="14" fontWeight="bold" fill=${fill}
                               dominantBaseline="middle">X</text>`;
           }
-          const elements = [];
-          if (pos === null || pos === 0) {
-            elements.push(html`<circle key=${"mark-"+i} cx=${x} cy=${y} r="6"
-                                fill="none" stroke="#aaa" strokeWidth="1.5" />`);
-          }
           if (mute === 'missed-mute') {
-            elements.push(html`<text key=${"missed-"+i} x=${x + (elements.length ? 10 : 0)} y=${y}
-                                    textAnchor="middle" fontSize="14" fontWeight="bold"
-                                    fill="#333" stroke="#999" strokeWidth="0.5"
-                                    dominantBaseline="middle">X</text>`);
+            return html`<text key=${"mark-"+i} x=${x} y=${y} textAnchor="middle"
+                              fontSize="14" fontWeight="bold" fill="#f44336"
+                              dominantBaseline="middle">X</text>`;
           }
-          return elements.length ? elements : null;
+          if (pos === null || pos === 0) {
+            return html`<circle key=${"mark-"+i} cx=${x} cy=${y} r="6"
+                                fill="none" stroke="#aaa" strokeWidth="1.5" />`;
+          }
+          return null;
         })}
 
         <!-- Finger dots (normal mode) -->
