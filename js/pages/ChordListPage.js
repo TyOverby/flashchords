@@ -46,19 +46,17 @@ export default function ChordListPage() {
       </div>
 
       ${showAdd && html`
-        <div className="card">
-          <div className="stack">
-            <input type="text" placeholder="Chord name (e.g. Am)"
-                   value=${name} onInput=${e => setName(e.target.value)} />
-            <${Fretboard}
-              positions=${fingering}
-              onPositionChange=${handlePositionChange}
-              interactive=${true}
-            />
-            <div className="row">
-              <button onClick=${handleSave} disabled=${!name.trim()}>Save Chord</button>
-              <button className="secondary" onClick=${() => setFingering([...EMPTY_FINGERING])}>Clear</button>
-            </div>
+        <div className="stack" style=${{ padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
+          <input type="text" placeholder="Chord name (e.g. Am)"
+                 value=${name} onInput=${e => setName(e.target.value)} />
+          <${Fretboard}
+            positions=${fingering}
+            onPositionChange=${handlePositionChange}
+            interactive=${true}
+          />
+          <div className="row">
+            <button onClick=${handleSave} disabled=${!name.trim()}>Save Chord</button>
+            <button className="secondary" onClick=${() => setFingering([...EMPTY_FINGERING])}>Clear</button>
           </div>
         </div>
       `}
@@ -69,16 +67,12 @@ export default function ChordListPage() {
 
       <div className="stack">
         ${chords.map(chord => html`
-          <div key=${chord.id} className="card">
-            <div className="row-between">
-              <div className="row">
-                <${FretboardMini} positions=${chord.fingering} />
-                <div>
-                  <div style=${{ fontWeight: 'bold', fontSize: '1.1rem' }}>${chord.name}</div>
-                </div>
-              </div>
-              <button className="danger" onClick=${() => handleDelete(chord.id)}>Delete</button>
+          <div key=${chord.id} className="row-between" style=${{ padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
+            <div className="row">
+              <${FretboardMini} positions=${chord.fingering} />
+              <div style=${{ fontWeight: 'bold', fontSize: '1.1rem' }}>${chord.name}</div>
             </div>
+            <button className="danger" onClick=${() => handleDelete(chord.id)}>Delete</button>
           </div>
         `)}
       </div>

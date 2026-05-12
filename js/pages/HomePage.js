@@ -17,17 +17,19 @@ export default function HomePage() {
 
   return html`
     <div className="stack">
-      <div className="card">
-        <div className="row-between">
+      <section>
+        <div className="row-between" style=${{ marginBottom: 8 }}>
           <h2 style=${{ margin: 0 }}>Chords</h2>
-          <a href="#/chords">
-            <button className="secondary">Manage Chords (${chords.length})</button>
-          </a>
+          <div className="row">
+            <a href="#/chords">
+              <button className="secondary">Manage Chords (${chords.length})</button>
+            </a>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="card">
-        <div className="row-between" style=${{ marginBottom: 12 }}>
+      <section>
+        <div className="row-between" style=${{ marginBottom: 8 }}>
           <h2 style=${{ margin: 0 }}>Decks</h2>
           <a href="#/deck/create">
             <button>+ New Deck</button>
@@ -54,7 +56,7 @@ export default function HomePage() {
             </div>
           `)}
         </div>
-      </div>
+      </section>
 
       <div style=${{ textAlign: 'center', marginTop: 8 }}>
         <button className="secondary" onClick=${exportData} style=${{ fontSize: '0.85rem' }}>
