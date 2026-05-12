@@ -125,7 +125,9 @@ export default function QuizPage({ deckId }) {
   // Play the chord when a new card is presented
   useEffect(() => {
     if (currentChord) {
-      playChord(currentChord.fingering);
+      setTimeout(function() {
+        playChord(currentChord.fingering);
+      }, 300);
     }
   }, [currentChord]);
 
