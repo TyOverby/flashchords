@@ -37,7 +37,7 @@ function fretY(fret) {
 // interactive: whether clicking changes positions
 // size: "normal" or "small" for thumbnails
 
-export default function Fretboard({ positions = [null,null,null,null,null,null], onPositionChange, displayMode, feedbackData, feedbackMarkers, interactive = false, size = "normal" }) {
+export default function Fretboard({ positions = [null,null,null,null,null,null], onPositionChange, displayMode, feedbackData, interactive = false, size = "normal" }) {
   const scale = size === "small" ? 0.45 : 1;
   const svgW = WIDTH * scale;
   const svgH = HEIGHT * scale;
@@ -113,40 +113,20 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
         })}
 
         <!-- Open/Mute markers above nut -->
-        ${displayMode === "feedback" && feedbackMarkers ?
-          feedbackMarkers.map((markers, i) => {
-            if (!markers || markers.length === 0) return null;
-            const x = stringX(i);
-            const y = NUT_Y - 14;
-            const colors = { green: "#4caf50", red: "#f44336", black: "#333" };
-            return markers.map((m, j) => {
-              const offset = markers.length > 1 ? (j === 0 ? -8 : 8) : 0;
-              if (m.type === 'mute') {
-                return html`<text key=${"fbmark-"+i+"-"+j} x=${x + offset} y=${y} textAnchor="middle"
-                                  fontSize="14" fontWeight="bold" fill=${colors[m.color]}
-                                  dominantBaseline="middle">X</text>`;
-              } else {
-                return html`<circle key=${"fbmark-"+i+"-"+j} cx=${x + offset} cy=${y} r="6"
-                                    fill="none" stroke=${colors[m.color]} strokeWidth="2" />`;
-              }
-            });
-          })
-          :
-          positions.map((pos, i) => {
-            const x = stringX(i);
-            const y = NUT_Y - 14;
-            if (pos === "X") {
-              return html`<text key=${"mark-"+i} x=${x} y=${y} textAnchor="middle"
-                                fontSize="14" fontWeight="bold" fill="#f44"
-                                dominantBaseline="middle">X</text>`;
-            }
-            if (pos === null || pos === 0) {
-              return html`<circle key=${"mark-"+i} cx=${x} cy=${y} r="6"
-                                  fill="none" stroke="#aaa" strokeWidth="1.5" />`;
-            }
-            return null;
-          })
-        }
+        ${positions.map((pos, i) => {
+          const x = stringX(i);
+          const y = NUT_Y - 14;
+          if (pos === "X") {
+            return html`<text key=${"mark-"+i} x=${x} y=${y} textAnchor="middle"
+                              fontSize="14" fontWeight="bold" fill="#f44"
+                              dominantBaseline="middle">X</text>`;
+          }
+          if (pos === null || pos === 0) {
+            return html`<circle key=${"mark-"+i} cx=${x} cy=${y} r="6"
+                                fill="none" stroke="#aaa" strokeWidth="1.5" />`;
+          }
+          return null;
+        })}
 
         <!-- Finger dots (normal mode) -->
         ${displayMode !== "feedback" && positions.map((pos, i) => {
