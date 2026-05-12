@@ -23,12 +23,8 @@ export default function HomePage() {
           <h2 style=${{ margin: 0 }}>Chords</h2>
           <span className="text-muted">${chords.length}</span>
           <div className="row" style=${{ gap: 4 }}>
-            <a href="#/chords?add">
-              <button className="icon-btn" title="Add chord"><${PlusIcon} size=${18} /></button>
-            </a>
-            <a href="#/chords">
-              <button className="icon-btn" title="Edit chords"><${PencilIcon} size=${18} /></button>
-            </a>
+            <button className="icon-btn" title="Add chord" onClick=${() => { window.location.hash = '#/chords?add'; }}><${PlusIcon} size=${18} /></button>
+            <button className="icon-btn" title="Edit chords" onClick=${() => { window.location.hash = '#/chords'; }}><${PencilIcon} size=${18} /></button>
           </div>
         </div>
       </section>
@@ -36,9 +32,7 @@ export default function HomePage() {
       <section>
         <div className="row-between" style=${{ marginBottom: 8 }}>
           <h2 style=${{ margin: 0 }}>Decks</h2>
-          <a href="#/deck/create">
-            <button className="icon-btn" title="New deck"><${PlusIcon} size=${18} /></button>
-          </a>
+          <button className="icon-btn" title="New deck" onClick=${() => { window.location.hash = '#/deck/create'; }}><${PlusIcon} size=${18} /></button>
         </div>
 
         ${decks.length === 0 && html`
