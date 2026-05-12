@@ -7,11 +7,11 @@ const { useState, useCallback } = React;
 
 const EMPTY_FINGERING = [null, null, null, null, null, null];
 
-export default function ChordListPage() {
+export default function ChordListPage({ autoAdd = false }) {
   const [chords, setChords] = useState(() => getAllChords());
   const [name, setName] = useState('');
   const [fingering, setFingering] = useState([...EMPTY_FINGERING]);
-  const [showAdd, setShowAdd] = useState(false);
+  const [showAdd, setShowAdd] = useState(autoAdd);
 
   const handlePositionChange = useCallback((stringIndex, value) => {
     setFingering(prev => {

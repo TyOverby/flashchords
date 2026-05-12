@@ -23,6 +23,9 @@ export default function HomePage() {
           <h2 style=${{ margin: 0 }}>Chords</h2>
           <span className="text-muted">${chords.length}</span>
           <div className="row" style=${{ gap: 4 }}>
+            <a href="#/chords?add">
+              <button className="icon-btn" title="Add chord"><${PlusIcon} size=${18} /></button>
+            </a>
             <a href="#/chords">
               <button className="icon-btn" title="Edit chords"><${PencilIcon} size=${18} /></button>
             </a>
