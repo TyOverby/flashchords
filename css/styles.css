@@ -5,17 +5,17 @@
 }
 
 :root {
-  --bg: #1a1a2e;
-  --surface: #16213e;
-  --surface-hover: #1a2745;
-  --primary: #e94560;
-  --primary-hover: #d63851;
-  --accent: #0f3460;
-  --text: #eee;
-  --text-muted: #999;
-  --success: #4caf50;
-  --error: #f44336;
-  --border: #2a2a4a;
+  --bg: #f0ece4;
+  --surface: #e8e2d8;
+  --surface-hover: #ddd6ca;
+  --primary: #6b4c3b;
+  --primary-hover: #573d2f;
+  --accent: #8c7a6b;
+  --text: #3b2a1a;
+  --text-muted: #8c7a6b;
+  --success: #5a7a4a;
+  --error: #a04030;
+  --border: #d4cbbf;
   --radius: 8px;
 }
 
@@ -38,10 +38,7 @@ h1 {
   font-size: 1.5rem;
   margin-bottom: 16px;
   text-align: center;
-  background: linear-gradient(135deg, var(--primary), #ff6b6b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text);
   letter-spacing: 0.5px;
 }
 
@@ -57,7 +54,7 @@ button {
   border: none;
   border-radius: var(--radius);
   background: var(--primary);
-  color: var(--text);
+  color: #f5f0eb;
   cursor: pointer;
   transition: background 0.15s;
   -webkit-tap-highlight-color: transparent;
@@ -195,7 +192,7 @@ a {
   padding: 8px 16px;
   border-radius: 20px;
   background: var(--accent);
-  color: var(--text);
+  color: #f5f0eb;
   border: 2px solid transparent;
   cursor: pointer;
   font-size: 1rem;
@@ -249,8 +246,8 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.85);
-  color: var(--error);
+  background: rgba(59, 42, 26, 0.9);
+  color: #f5f0eb;
   font-size: 1.5rem;
   font-weight: bold;
   padding: 16px 32px;

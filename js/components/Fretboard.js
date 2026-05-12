@@ -96,20 +96,20 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
       >
         <!-- Nut -->
         <line x1=${stringX(0)} y1=${NUT_Y} x2=${stringX(NUM_STRINGS-1)} y2=${NUT_Y}
-              stroke="#ccc" strokeWidth="4" />
+              stroke="#5a4535" strokeWidth="4" />
 
         <!-- Frets -->
         ${Array.from({length: NUM_FRETS}, (_, i) => {
           const y = NUT_Y + (i + 1) * FRET_SPACING;
           return html`<line key=${"fret-"+i} x1=${stringX(0)} y1=${y} x2=${stringX(NUM_STRINGS-1)} y2=${y}
-                            stroke="#666" strokeWidth="2" />`;
+                            stroke="#b5a898" strokeWidth="2" />`;
         })}
 
         <!-- Strings -->
         ${Array.from({length: NUM_STRINGS}, (_, i) => {
           const x = stringX(i);
           return html`<line key=${"string-"+i} x1=${x} y1=${NUT_Y} x2=${x} y2=${NUT_Y + NUM_FRETS * FRET_SPACING}
-                            stroke="#aaa" strokeWidth=${1 + (NUM_STRINGS - 1 - i) * 0.3} />`;
+                            stroke="#8c7a6b" strokeWidth=${1 + (NUM_STRINGS - 1 - i) * 0.3} />`;
         })}
 
         <!-- Open/Mute markers above nut -->
@@ -118,19 +118,19 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
           const y = NUT_Y - 14;
           const mute = muteMarkers ? muteMarkers[i] : null;
           if (pos === "X") {
-            const fill = mute === 'wrong-mute' ? '#f44336' : '#999';
+            const fill = mute === 'wrong-mute' ? '#a04030' : '#8c7a6b';
             return html`<text key=${"mark-"+i} x=${x} y=${y} textAnchor="middle"
                               fontSize="14" fontWeight="bold" fill=${fill}
                               dominantBaseline="middle">X</text>`;
           }
           if (mute === 'missed-mute') {
             return html`<text key=${"mark-"+i} x=${x} y=${y} textAnchor="middle"
-                              fontSize="14" fontWeight="bold" fill="#f44336"
+                              fontSize="14" fontWeight="bold" fill="#a04030"
                               dominantBaseline="middle">X</text>`;
           }
           if (pos === null || pos === 0) {
             return html`<circle key=${"mark-"+i} cx=${x} cy=${y} r="6"
-                                fill="none" stroke="#aaa" strokeWidth="1.5" />`;
+                                fill="none" stroke="#8c7a6b" strokeWidth="1.5" />`;
           }
           return null;
         })}
@@ -141,17 +141,17 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
           const fret = typeof pos === 'number' ? pos : parseInt(pos);
           if (isNaN(fret) || fret < 1 || fret > NUM_FRETS) return null;
           return html`<circle key=${"dot-"+i} cx=${stringX(i)} cy=${fretY(fret)} r=${DOT_RADIUS}
-                              fill="#999" />`;
+                              fill="#5a4535" />`;
         })}
 
         <!-- Feedback dots -->
         ${displayMode === "feedback" && feedbackData && feedbackData.map((stringDots, i) => {
           if (!stringDots) return null;
           return stringDots.map((dot, j) => {
-            const colors = { green: "#4caf50", red: "#f44336", black: "#333" };
+            const colors = { green: "#5a7a4a", red: "#a04030", black: "#3b2a1a" };
             return html`<circle key=${"fb-"+i+"-"+j} cx=${stringX(i)} cy=${fretY(dot.fret)}
-                                r=${DOT_RADIUS} fill=${colors[dot.color] || "#333"}
-                                stroke=${dot.color === "black" ? "#999" : "none"} strokeWidth="1.5" />`;
+                                r=${DOT_RADIUS} fill=${colors[dot.color] || "#3b2a1a"}
+                                stroke=${dot.color === "black" ? "#8c7a6b" : "none"} strokeWidth="1.5" />`;
           });
         })}
       </svg>
