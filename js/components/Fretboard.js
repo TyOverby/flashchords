@@ -141,7 +141,7 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
           const fret = typeof pos === 'number' ? pos : parseInt(pos);
           if (isNaN(fret) || fret < 1 || fret > NUM_FRETS) return null;
           return html`<circle key=${"dot-"+i} cx=${stringX(i)} cy=${fretY(fret)} r=${DOT_RADIUS}
-                              fill="#e94560" />`;
+                              fill="#999" />`;
         })}
 
         <!-- Feedback dots -->
