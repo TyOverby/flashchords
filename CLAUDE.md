@@ -15,8 +15,9 @@ The home page is the hub. It has two sections (no card wrappers — visual hiera
 
 - **Chords section** — shows the chord count, a pencil icon button to edit chords, and a plus icon button that navigates to the chord editor with the add form pre-opened (`#/chords?add`).
 - **Decks section** — lists all decks. Each deck row shows the deck name (clickable — navigates to quiz) and chord count, with a trash icon button for deletion. A plus icon button at the top navigates to deck creation.
+- **Storage section** — three icon buttons centered in a row: download (exports all data as JSON), upload (imports data from a JSON file, overwriting current data), and clear (deletes all chords, decks, and the seed flag after confirmation).
 
-A download icon button at the bottom exports all chords and decks as a JSON file. The FlashChords title in the header is clickable and always navigates back to home.
+The FlashChords title in the header is clickable and always navigates back to home.
 
 ### Chord Management (`#/chords`)
 

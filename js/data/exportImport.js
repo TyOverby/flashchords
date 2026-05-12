@@ -18,6 +18,12 @@ export function exportData() {
   URL.revokeObjectURL(url);
 }
 
+export function clearData() {
+  importChords([]);
+  importDecks([]);
+  localStorage.removeItem('flashchords_seeded');
+}
+
 export function importData(jsonString) {
   const data = JSON.parse(jsonString);
   if (!data.chords || !data.decks) {

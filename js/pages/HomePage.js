@@ -1,18 +1,43 @@
 import { React, html } from '../deps.js';
 import { getAllDecks, deleteDeck } from '../data/deckStore.js';
 import { getAllChords } from '../data/chordStore.js';
-import { exportData } from '../data/exportImport.js';
-import { PencilIcon, PlusIcon, TrashIcon, DownloadIcon } from '../components/Icons.js';
+import { exportData, importData, clearData } from '../data/exportImport.js';
+import { PencilIcon, PlusIcon, TrashIcon, DownloadIcon, UploadIcon } from '../components/Icons.js';
 
-const { useState, useCallback } = React;
+const { useState, useCallback, useRef } = React;
 
 export default function HomePage() {
   const [decks, setDecks] = useState(() => getAllDecks());
   const chords = getAllChords();
 
+  const fileInputRef = useRef(null);
+
   const handleDeleteDeck = useCallback((id) => {
     if (!confirm('Delete this deck?')) return;
     deleteDeck(id);
+    setDecks(getAllDecks());
+  }, []);
+
+  const handleImport = useCallback((e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const result = importData(reader.result);
+        alert(`Imported ${result.chords} chords and ${result.decks} decks.`);
+        setDecks(getAllDecks());
+      } catch (err) {
+        alert('Failed to import: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }, []);
+
+  const handleClear = useCallback(() => {
+    if (!confirm('Clear all chords and decks? This cannot be undone.')) return;
+    clearData();
     setDecks(getAllDecks());
   }, []);
 
@@ -56,11 +81,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div style=${{ textAlign: 'center', marginTop: 8 }}>
-        <button className="icon-btn" onClick=${exportData} title="Export data as JSON">
-          <${DownloadIcon} size=${18} />
-        </button>
-      </div>
+      <section>
+        <h2 style=${{ margin: '0 0 8px' }}>Storage</h2>
+        <div className="row" style=${{ gap: 8, justifyContent: 'center' }}>
+          <button className="icon-btn" onClick=${exportData} title="Download data as JSON">
+            <${DownloadIcon} size=${18} />
+          </button>
+          <button className="icon-btn" onClick=${() => fileInputRef.current.click()} title="Upload data from JSON">
+            <${UploadIcon} size=${18} />
+          </button>
+          <button className="icon-btn danger" onClick=${handleClear} title="Clear all data">
+            <${TrashIcon} size=${18} />
+          </button>
+          <input type="file" accept=".json" ref=${fileInputRef} onChange=${handleImport}
+                 style=${{ display: 'none' }} />
+        </div>
+      </section>
     </div>
   `;
 }

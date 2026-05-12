@@ -78,6 +78,14 @@ export function XIcon({ size }) {
   `} />`;
 }
 
+export function UploadIcon({ size }) {
+  return html`<${Icon} size=${size} d=${html`
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="17 8 12 3 7 8" />
+    <line x1="12" y1="3" x2="12" y2="15" />
+  `} />`;
+}
+
 export function EraserIcon({ size }) {
   return html`<${Icon} size=${size} d=${html`
     <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21" />
