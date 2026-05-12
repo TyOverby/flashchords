@@ -3,6 +3,7 @@ import { getDeck } from '../data/deckStore.js';
 import { getChord } from '../data/chordStore.js';
 import Fretboard from '../components/Fretboard.js';
 import { ArrowLeftIcon, ArrowRightIcon } from '../components/Icons.js';
+import { playChord, playString } from '../player.js';
 
 const { useState, useCallback, useEffect, useMemo, useRef } = React;
 
@@ -121,6 +122,13 @@ export default function QuizPage({ deckId }) {
 
   const currentChord = queue[currentIdx] || null;
 
+  // Play the chord when a new card is presented
+  useEffect(() => {
+    if (currentChord) {
+      playChord(currentChord.fingering);
+    }
+  }, [currentChord]);
+
   const nextCard = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
     if (tryAgainTimerRef.current) clearTimeout(tryAgainTimerRef.current);
@@ -142,6 +150,7 @@ export default function QuizPage({ deckId }) {
   // --- Name → Fingering mode ---
   const handlePositionChange = useCallback((stringIndex, value) => {
     if (feedback) return;
+    playString(stringIndex, value);
     setGuess(prev => {
       const next = [...prev];
       next[stringIndex] = value;

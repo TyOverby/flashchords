@@ -68,6 +68,10 @@ The user sees buttons for every unique chord name in the deck. On a wrong guess,
 
 Switching modes mid-quiz resets to a fresh card.
 
+#### Audio
+
+When a new card is presented, the chord is played automatically using synthesized guitar audio (Karplus-Strong plucked string synthesis). In Name → Fingering mode, each time the user places a finger on a fret, the corresponding string note plays at that fret position.
+
 ### First Launch
 
 On first load (or if localStorage is empty), 8 common open chords are seeded: C, D, E, G, A, Am, Em, Dm. This only happens once — the seed flag is stored in localStorage under `flashchords_seeded`.
@@ -86,6 +90,7 @@ css/styles.css          All styles, light theme (off-grey/dark-brown) with CSS c
 js/
   deps.js               Shared imports: React, ReactDOM, htm → html tagged template
   app.js                Root component, hash-based router, seed trigger
+  player.js             Karplus-Strong audio synthesis — playChord() and playString()
   components/
     Fretboard.js        SVG fretboard (interactive + static + feedback + mini)
     Icons.js            Inline SVG icon components (Lucide-style)
@@ -143,6 +148,17 @@ The `normalizePos()` function in QuizPage treats `null`, `undefined`, and `0` as
 The stores read from localStorage on every call rather than caching in memory. This keeps things simple and avoids stale-state bugs between components — at the cost of JSON.parse on each read, which is negligible for the data sizes involved.
 
 `exportImport.js` handles JSON export (creates a Blob, triggers a download via a temporary `<a>` element) and import (parses JSON and overwrites both stores).
+
+### Audio synthesis
+
+`player.js` implements Karplus-Strong plucked string synthesis using `ScriptProcessorNode` and a `BiquadFilter` (bandpass). It exports two functions:
+
+- `playChord(fingering, stagger?)` — strums all non-muted strings with a configurable stagger delay (default 25ms per string).
+- `playString(stringIndex, fretValue)` — plays a single string at the given fret. Muted strings (`"X"`) are silently skipped.
+
+Both functions lazily create a shared `AudioContext` and call `resume()` to handle the browser's autoplay policy (context starts suspended until a user gesture).
+
+String frequencies use standard guitar tuning (E A D G B E) with A2 = 110 Hz as the reference. Each plucked note auto-disconnects after 2 seconds to prevent memory leaks.
 
 ### Quiz state machine
 
