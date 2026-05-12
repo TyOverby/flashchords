@@ -11,18 +11,18 @@ A mobile-optimized flashcard app for learning guitar chord fingerings. Built as 
 
 ### Home Page (`#/`)
 
-The home page is the hub. It has two cards:
+The home page is the hub. It has two sections (no card wrappers — visual hierarchy comes from font size/weight):
 
-- **Chords card** — shows the total chord count and a "Manage Chords" button that navigates to the chord editor.
-- **Decks card** — lists all decks. Each deck row shows the deck name, chord count, a "Quiz" button, and a "Delete" button. A "+ New Deck" button at the top navigates to deck creation.
+- **Chords section** — shows the chord count, a pencil icon button to edit chords, and a plus icon button that navigates to the chord editor with the add form pre-opened (`#/chords?add`).
+- **Decks section** — lists all decks. Each deck row shows the deck name (clickable — navigates to quiz) and chord count, with a trash icon button for deletion. A plus icon button at the top navigates to deck creation.
 
-An "Export Data (JSON)" button at the bottom downloads all chords and decks as a JSON file. The FlashChords title in the header is clickable and always navigates back to home.
+A download icon button at the bottom exports all chords and decks as a JSON file. The FlashChords title in the header is clickable and always navigates back to home.
 
 ### Chord Management (`#/chords`)
 
-Lists all chords, each shown as a card with a mini fretboard thumbnail and the chord name. Each card has a delete button.
+Lists all chords, each shown as a row with a mini fretboard thumbnail and the chord name. Each row has a trash icon button for deletion.
 
-The "+ Add Chord" button toggles open an inline form with a text input for the chord name and a full-size interactive fretboard. The fretboard interaction works as follows:
+The plus icon button toggles open an inline form with a text input for the chord name and a full-size interactive fretboard. When navigated to via `#/chords?add`, the form opens automatically. The fretboard interaction works as follows:
 
 - **Tapping a fret intersection** places a dot on that string/fret. Tapping the same position again removes it (toggles back to open).
 - **Tapping above the nut** toggles between open (circle marker) and muted ("X" marker). There is no intermediate state — it cycles open → X → open.
@@ -75,12 +75,13 @@ On first load (or if localStorage is empty), 8 common open chords are seeded: C,
 
 ```
 index.html              Entry point, loads React/htm via CDN importmap
-css/styles.css          All styles, dark theme with CSS custom properties
+css/styles.css          All styles, light theme (off-grey/dark-brown) with CSS custom properties
 js/
   deps.js               Shared imports: React, ReactDOM, htm → html tagged template
   app.js                Root component, hash-based router, seed trigger
   components/
     Fretboard.js        SVG fretboard (interactive + static + feedback + mini)
+    Icons.js            Inline SVG icon components (Lucide-style)
   data/
     util.js             randomId() helper (avoids crypto.randomUUID secure-context requirement)
     chordStore.js       Chord CRUD against localStorage
@@ -108,7 +109,7 @@ The app uses native ES modules with an importmap in index.html pointing to esm.s
 
 `app.js` implements a minimal router: it parses `window.location.hash` and maps it to a page component. All pages are eagerly imported at startup so the app works fully offline with no async loading. Route params (like `deckId`) are spread as props onto the page component.
 
-Routes: `#/` (home), `#/chords`, `#/deck/create`, `#/quiz/:deckId`.
+Routes: `#/` (home), `#/chords` (supports `?add` query param), `#/deck/create`, `#/quiz/:deckId`. The router parses query parameters from the hash fragment and passes them as props.
 
 ### SVG Fretboard
 
