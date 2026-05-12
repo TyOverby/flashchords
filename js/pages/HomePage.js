@@ -83,15 +83,18 @@ export default function HomePage() {
 
       <section>
         <h2 style=${{ margin: '0 0 8px' }}>Storage</h2>
-        <div className="row" style=${{ gap: 8, justifyContent: 'center' }}>
-          <button className="icon-btn" onClick=${exportData} title="Download data as JSON">
+        <div className="row" style=${{ gap: 12, justifyContent: 'center' }}>
+          <button className="icon-btn-labeled" onClick=${exportData} title="Download data as JSON">
             <${DownloadIcon} size=${18} />
+            <span>Export</span>
           </button>
-          <button className="icon-btn" onClick=${() => fileInputRef.current.click()} title="Upload data from JSON">
+          <button className="icon-btn-labeled" onClick=${() => fileInputRef.current.click()} title="Upload data from JSON">
             <${UploadIcon} size=${18} />
+            <span>Import</span>
           </button>
-          <button className="icon-btn danger" onClick=${handleClear} title="Clear all data">
+          <button className="icon-btn-labeled danger" onClick=${handleClear} title="Clear all data">
             <${TrashIcon} size=${18} />
+            <span>Clear</span>
           </button>
           <input type="file" accept=".json" ref=${fileInputRef} onChange=${handleImport}
                  style=${{ display: 'none' }} />

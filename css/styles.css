@@ -108,6 +108,32 @@ button.icon-btn.danger:active {
   background: var(--surface-hover);
 }
 
+button.icon-btn-labeled {
+  background: none;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+button.icon-btn-labeled:active {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+button.icon-btn-labeled.danger {
+  color: var(--error);
+}
+
+button.icon-btn-labeled.danger:active {
+  background: var(--surface-hover);
+}
+
 input[type="text"] {
   font-family: inherit;
   font-size: 1rem;
