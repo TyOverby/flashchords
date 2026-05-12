@@ -1,4 +1,5 @@
 import { getAllChords, importChords } from './chordStore.js';
+import { addDeck } from './deckStore.js';
 import { randomId } from './util.js';
 
 const SEED_KEY = 'flashchords_seeded';
@@ -31,5 +32,6 @@ export function seedIfNeeded() {
   }));
 
   importChords(chords);
+  addDeck('All Chords', chords.map(c => c.id));
   localStorage.setItem(SEED_KEY, '1');
 }
