@@ -1,4 +1,5 @@
 import { getAllChords, importChords } from './chordStore.js';
+import { randomId } from './util.js';
 
 const SEED_KEY = 'flashchords_seeded';
 
@@ -24,7 +25,7 @@ export function seedIfNeeded() {
   }
 
   const chords = DEFAULT_CHORDS.map(c => ({
-    id: crypto.randomUUID(),
+    id: randomId(),
     name: c.name,
     fingering: c.fingering,
   }));

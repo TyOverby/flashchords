@@ -1,3 +1,5 @@
+import { randomId } from './util.js';
+
 const STORAGE_KEY = 'flashchords_decks';
 
 function loadDecks() {
@@ -23,7 +25,7 @@ export function getDeck(id) {
 export function addDeck(name, chordIds) {
   const decks = loadDecks();
   const deck = {
-    id: crypto.randomUUID(),
+    id: randomId(),
     name: name.trim(),
     chordIds: [...chordIds],
   };

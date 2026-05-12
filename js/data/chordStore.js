@@ -1,3 +1,5 @@
+import { randomId } from './util.js';
+
 const STORAGE_KEY = 'flashchords_chords';
 
 function loadChords() {
@@ -23,7 +25,7 @@ export function getChord(id) {
 export function addChord(name, fingering) {
   const chords = loadChords();
   const chord = {
-    id: crypto.randomUUID(),
+    id: randomId(),
     name: name.trim(),
     fingering: [...fingering],
   };
