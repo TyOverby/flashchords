@@ -1,6 +1,6 @@
 import { html, React } from '../deps.js';
 
-const { useState, useCallback, useRef } = React;
+const { useState, useCallback } = React;
 
 // Fretboard dimensions
 const PADDING_LEFT = 40;
@@ -42,13 +42,9 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
   const svgW = WIDTH * scale;
   const svgH = HEIGHT * scale;
 
-  const lastClickTime = useRef(0);
-
-  const handleClick = useCallback((e) => {
+  const handlePointerUp = useCallback((e) => {
     if (!interactive || !onPositionChange) return;
-    const now = Date.now();
-    if (now - lastClickTime.current < 300) return;
-    lastClickTime.current = now;
+    e.preventDefault();
     const svg = e.currentTarget;
     const pt = svg.createSVGPoint();
     pt.x = e.clientX;
@@ -87,7 +83,7 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
     // Toggle: if same fret, clear to open; otherwise set fret
     const newVal = (current === closestFret) ? null : closestFret;
     onPositionChange(closestString, newVal);
-  }, [interactive, onPositionChange, positions, scale]);
+  }, [interactive, onPositionChange, positions]);
 
   return html`
     <div className="fretboard-container">
@@ -95,8 +91,8 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
         width=${svgW}
         height=${svgH}
         viewBox="0 0 ${WIDTH} ${HEIGHT}"
-        onClick=${handleClick}
-        style=${{ cursor: interactive ? 'pointer' : 'default' }}
+        onPointerUp=${handlePointerUp}
+        style=${{ cursor: interactive ? 'pointer' : 'default', touchAction: 'none' }}
       >
         <!-- Debug hit zones -->
         ${interactive && Array.from({length: NUM_STRINGS}, (_, s) => {
