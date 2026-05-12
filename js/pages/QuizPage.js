@@ -151,47 +151,47 @@ export default function QuizPage({ deckId }) {
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
   }, []);
 
+  const uniqueNames = useMemo(() => {
+    return [...new Set(chords.map(c => c.name))];
+  }, [chords]);
+
   if (!deck) {
     return html`
-      <div class="stack">
-        <a href="#/" class="back-link">← Back</a>
-        <p class="text-center text-muted">Deck not found.</p>
+      <div className="stack">
+        <a href="#/" className="back-link">← Back</a>
+        <p className="text-center text-muted">Deck not found.</p>
       </div>
     `;
   }
 
   if (chords.length === 0) {
     return html`
-      <div class="stack">
-        <a href="#/" class="back-link">← Back</a>
-        <p class="text-center text-muted">This deck has no valid chords.</p>
+      <div className="stack">
+        <a href="#/" className="back-link">← Back</a>
+        <p className="text-center text-muted">This deck has no valid chords.</p>
       </div>
     `;
   }
 
-  const uniqueNames = useMemo(() => {
-    return [...new Set(chords.map(c => c.name))];
-  }, [chords]);
-
   const progress = `${(currentIdx % queue.length) + 1} / ${queue.length}`;
 
   return html`
-    <div class="stack">
-      <a href="#/" class="back-link">← Back</a>
+    <div className="stack">
+      <a href="#/" className="back-link">← Back</a>
 
-      <div class="text-center text-muted" style=${{ marginBottom: 4 }}>${deck.name}</div>
+      <div className="text-center text-muted" style=${{ marginBottom: 4 }}>${deck.name}</div>
 
-      <div class="mode-selector">
+      <div className="mode-selector">
         ${MODES.map(m => html`
           <button key=${m.id}
-                  class=${`mode-btn ${mode === m.id ? 'active' : ''}`}
+                  className=${`mode-btn ${mode === m.id ? 'active' : ''}`}
                   onClick=${() => { setMode(m.id); nextCard(); }}>
             ${m.label}
           </button>
         `)}
       </div>
 
-      <div class="text-center text-muted" style=${{ fontSize: '0.8rem' }}>${progress}</div>
+      <div className="text-center text-muted" style=${{ fontSize: '0.8rem' }}>${progress}</div>
 
       ${currentChord && effectiveMode === 'name2fret' && html`
         <${NameToFretQuiz}
@@ -221,7 +221,7 @@ export default function QuizPage({ deckId }) {
 
 function NameToFretQuiz({ chord, guess, feedback, feedbackData, onPositionChange, onGuess, onNext }) {
   return html`
-    <div class="stack text-center">
+    <div className="stack text-center">
       <div style=${{ fontSize: '2rem', fontWeight: 'bold' }}>${chord.name}</div>
 
       ${!feedback && html`
@@ -233,7 +233,7 @@ function NameToFretQuiz({ chord, guess, feedback, feedbackData, onPositionChange
       `}
 
       ${feedback === 'correct' && html`
-        <div class="feedback-correct">Correct!</div>
+        <div className="feedback-correct">Correct!</div>
       `}
 
       ${feedback === 'wrong' && html`
@@ -250,7 +250,7 @@ function NameToFretQuiz({ chord, guess, feedback, feedbackData, onPositionChange
 
       ${feedback === 'wrong' && html`
         <div>
-          <p class="feedback-wrong">Not quite! Tap to continue.</p>
+          <p className="feedback-wrong">Not quite! Tap to continue.</p>
           <button onClick=${onNext}>Next</button>
         </div>
       `}
@@ -260,24 +260,24 @@ function NameToFretQuiz({ chord, guess, feedback, feedbackData, onPositionChange
 
 function FretToNameQuiz({ chord, names, feedback, disabledNames, onNameGuess, onNext }) {
   return html`
-    <div class="stack text-center">
+    <div className="stack text-center">
       <div style=${{ fontSize: '1rem', color: 'var(--text-muted)' }}>What chord is this?</div>
 
       <${Fretboard} positions=${chord.fingering} interactive=${false} />
 
       ${feedback === 'correct' && html`
-        <div class="feedback-correct">Correct!</div>
+        <div className="feedback-correct">Correct!</div>
       `}
 
       ${feedback === 'tryagain' && html`
-        <div class="feedback-wrong">Try again!</div>
+        <div className="feedback-wrong">Try again!</div>
       `}
 
       ${feedback !== 'correct' && html`
-        <div class="chip-grid" style=${{ justifyContent: 'center' }}>
+        <div className="chip-grid" style=${{ justifyContent: 'center' }}>
           ${names.map(name => html`
             <button key=${name}
-                    class=${`chip ${disabledNames.has(name) ? '' : ''}`}
+                    className=${`chip ${disabledNames.has(name) ? '' : ''}`}
                     disabled=${disabledNames.has(name)}
                     onClick=${() => onNameGuess(name)}>
               ${name}

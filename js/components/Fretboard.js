@@ -82,7 +82,7 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
   }, [interactive, onPositionChange, positions, scale]);
 
   return html`
-    <div class="fretboard-container">
+    <div className="fretboard-container">
       <svg
         width=${svgW}
         height=${svgH}

@@ -16,18 +16,18 @@ export default function HomePage() {
   }, []);
 
   return html`
-    <div class="stack">
-      <div class="card">
-        <div class="row-between">
+    <div className="stack">
+      <div className="card">
+        <div className="row-between">
           <h2 style=${{ margin: 0 }}>Chords</h2>
           <a href="#/chords">
-            <button class="secondary">Manage Chords (${chords.length})</button>
+            <button className="secondary">Manage Chords (${chords.length})</button>
           </a>
         </div>
       </div>
 
-      <div class="card">
-        <div class="row-between" style=${{ marginBottom: 12 }}>
+      <div className="card">
+        <div className="row-between" style=${{ marginBottom: 12 }}>
           <h2 style=${{ margin: 0 }}>Decks</h2>
           <a href="#/deck/create">
             <button>+ New Deck</button>
@@ -35,21 +35,21 @@ export default function HomePage() {
         </div>
 
         ${decks.length === 0 && html`
-          <p class="text-muted">No decks yet. Create one to start quizzing!</p>
+          <p className="text-muted">No decks yet. Create one to start quizzing!</p>
         `}
 
-        <div class="stack">
+        <div className="stack">
           ${decks.map(deck => html`
-            <div key=${deck.id} class="row-between" style=${{ padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
+            <div key=${deck.id} className="row-between" style=${{ padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
               <div style=${{ flex: 1 }}>
                 <div style=${{ fontWeight: 'bold' }}>${deck.name}</div>
-                <div class="text-muted">${deck.chordIds.length} chord${deck.chordIds.length !== 1 ? 's' : ''}</div>
+                <div className="text-muted">${deck.chordIds.length} chord${deck.chordIds.length !== 1 ? 's' : ''}</div>
               </div>
-              <div class="row">
+              <div className="row">
                 <a href=${`#/quiz/${deck.id}`}>
-                  <button class="secondary" style=${{ fontSize: '0.85rem', padding: '6px 12px' }}>Quiz</button>
+                  <button className="secondary" style=${{ fontSize: '0.85rem', padding: '6px 12px' }}>Quiz</button>
                 </a>
-                <button class="danger" onClick=${() => handleDeleteDeck(deck.id)}>Delete</button>
+                <button className="danger" onClick=${() => handleDeleteDeck(deck.id)}>Delete</button>
               </div>
             </div>
           `)}
@@ -57,7 +57,7 @@ export default function HomePage() {
       </div>
 
       <div style=${{ textAlign: 'center', marginTop: 8 }}>
-        <button class="secondary" onClick=${exportData} style=${{ fontSize: '0.85rem' }}>
+        <button className="secondary" onClick=${exportData} style=${{ fontSize: '0.85rem' }}>
           Export Data (JSON)
         </button>
       </div>

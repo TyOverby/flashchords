@@ -36,9 +36,9 @@ export default function ChordListPage() {
   }, []);
 
   return html`
-    <div class="stack">
-      <a href="#/" class="back-link">← Back</a>
-      <div class="row-between">
+    <div className="stack">
+      <a href="#/" className="back-link">← Back</a>
+      <div className="row-between">
         <h2>Chords (${chords.length})</h2>
         <button onClick=${() => setShowAdd(!showAdd)}>
           ${showAdd ? 'Cancel' : '+ Add Chord'}
@@ -46,8 +46,8 @@ export default function ChordListPage() {
       </div>
 
       ${showAdd && html`
-        <div class="card">
-          <div class="stack">
+        <div className="card">
+          <div className="stack">
             <input type="text" placeholder="Chord name (e.g. Am)"
                    value=${name} onInput=${e => setName(e.target.value)} />
             <${Fretboard}
@@ -55,29 +55,29 @@ export default function ChordListPage() {
               onPositionChange=${handlePositionChange}
               interactive=${true}
             />
-            <div class="row">
+            <div className="row">
               <button onClick=${handleSave} disabled=${!name.trim()}>Save Chord</button>
-              <button class="secondary" onClick=${() => setFingering([...EMPTY_FINGERING])}>Clear</button>
+              <button className="secondary" onClick=${() => setFingering([...EMPTY_FINGERING])}>Clear</button>
             </div>
           </div>
         </div>
       `}
 
       ${chords.length === 0 && !showAdd && html`
-        <p class="text-muted text-center">No chords yet. Add some!</p>
+        <p className="text-muted text-center">No chords yet. Add some!</p>
       `}
 
-      <div class="stack">
+      <div className="stack">
         ${chords.map(chord => html`
-          <div key=${chord.id} class="card">
-            <div class="row-between">
-              <div class="row">
+          <div key=${chord.id} className="card">
+            <div className="row-between">
+              <div className="row">
                 <${FretboardMini} positions=${chord.fingering} />
                 <div>
                   <div style=${{ fontWeight: 'bold', fontSize: '1.1rem' }}>${chord.name}</div>
                 </div>
               </div>
-              <button class="danger" onClick=${() => handleDelete(chord.id)}>Delete</button>
+              <button className="danger" onClick=${() => handleDelete(chord.id)}>Delete</button>
             </div>
           </div>
         `)}

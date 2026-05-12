@@ -50,7 +50,7 @@ function App() {
       </h1>
       ${PageComponent
         ? html`<${PageComponent} ...${route.params} />`
-        : html`<p class="text-center text-muted">Loading...</p>`
+        : html`<p className="text-center text-muted">Loading...</p>`
       }
     </div>
   `;

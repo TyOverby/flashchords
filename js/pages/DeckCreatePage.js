@@ -41,28 +41,28 @@ export default function DeckCreatePage() {
   }, [deckName, autoName, selectedIds]);
 
   return html`
-    <div class="stack">
-      <a href="#/" class="back-link">← Back</a>
+    <div className="stack">
+      <a href="#/" className="back-link">← Back</a>
       <h2>Create Deck</h2>
 
       <input type="text" placeholder=${autoName || "Deck name"}
              value=${deckName} onInput=${e => setDeckName(e.target.value)} />
 
-      <input type="text" class="search-input" placeholder="Search chords..."
+      <input type="text" className="search-input" placeholder="Search chords..."
              value=${search} onInput=${e => setSearch(e.target.value)} />
 
       ${allChords.length === 0 && html`
-        <p class="text-muted text-center">No chords available. Add some chords first!</p>
+        <p className="text-muted text-center">No chords available. Add some chords first!</p>
       `}
 
-      <div class="stack">
+      <div className="stack">
         ${filtered.map(chord => {
           const checked = selectedIds.has(chord.id);
           return html`
             <div key=${chord.id}
-                 class=${`checkbox-row ${checked ? 'checked' : ''}`}
+                 className=${`checkbox-row ${checked ? 'checked' : ''}`}
                  onClick=${() => toggleChord(chord.id)}>
-              <div class="checkbox-indicator">${checked ? '✓' : ''}</div>
+              <div className="checkbox-indicator">${checked ? '✓' : ''}</div>
               <${FretboardMini} positions=${chord.fingering} />
               <div style=${{ fontWeight: 'bold' }}>${chord.name}</div>
             </div>
