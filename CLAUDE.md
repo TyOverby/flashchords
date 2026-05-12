@@ -80,6 +80,7 @@ On first load (or if localStorage is empty), 8 common open chords are seeded: C,
 
 ```
 index.html              Entry point, loads React/htm via CDN importmap
+sw.js                   Service worker — network-first caching for local files
 manifest.json           Web app manifest for PWA / Add to Home Screen
 icons/
   icon.svg              Vector app icon (guitar pick with chord dots)
