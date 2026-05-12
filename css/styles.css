@@ -216,24 +216,54 @@ a {
   cursor: default;
 }
 
-.mode-selector {
+.quiz-topbar {
   display: flex;
-  gap: 4px;
-  justify-content: center;
-  margin-bottom: 16px;
+  align-items: center;
+  gap: 12px;
 }
 
-.mode-btn {
-  padding: 8px 14px;
+.quiz-deck-name {
+  flex: 1;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mode-cycle-btn {
+  padding: 6px 14px;
   font-size: 0.9rem;
   border-radius: 20px;
   background: var(--accent);
-  border: 2px solid transparent;
+  border: 2px solid var(--primary);
+  flex-shrink: 0;
 }
 
-.mode-btn.active {
-  border-color: var(--primary);
+.mode-cycle-btn:active {
   background: var(--primary);
+}
+
+.try-again-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: var(--error);
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 16px 32px;
+  border-radius: 12px;
+  z-index: 100;
+  pointer-events: none;
+  animation: overlayFade 0.5s ease-out forwards;
+}
+
+@keyframes overlayFade {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .chord-thumbnail {

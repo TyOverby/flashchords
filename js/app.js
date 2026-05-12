@@ -45,9 +45,11 @@ function App() {
 
   return html`
     <div>
-      <h1 onClick=${() => window.location.hash = '#/'} style=${{ cursor: 'pointer' }}>
-        FlashChords
-      </h1>
+      ${route.page !== 'quiz' && html`
+        <h1 onClick=${() => window.location.hash = '#/'} style=${{ cursor: 'pointer' }}>
+          FlashChords
+        </h1>
+      `}
       ${PageComponent
         ? html`<${PageComponent} ...${route.params} />`
         : html`<p className="text-center text-muted">Loading...</p>`

@@ -5,7 +5,7 @@ A mobile-optimized flashcard app for learning guitar chord fingerings. Built as 
 ## Working on This Project
 
 - **Keep CLAUDE.md up to date.** When you add, remove, or change features, pages, components, data models, or architectural patterns, update the relevant sections of this file to reflect the current state of the project. This includes the file tree in "Project Structure", the UX descriptions, and the architecture notes.
-- **Commit after each unit of work.** Make a git commit after completing each logical piece of work (a new feature, a bug fix, a refactor, etc.). Don't batch unrelated changes into a single commit.
+- **Commit after each unit of work.** Make a git commit after completing each logical piece of work (a new feature, a bug fix, a refactor, etc.). Don't batch unrelated changes into a single commit. Do this proactively — don't wait for the user to ask you to commit.
 
 ## User Experience
 
@@ -44,13 +44,13 @@ The "Create Deck" button is sticky at the bottom and shows the selection count. 
 
 ### Quiz (`#/quiz/:deckId`)
 
-The quiz page has three modes, selected via pill buttons at the top:
+The quiz page has a compact top bar with the back button, deck name, and a single mode-cycle button all horizontally aligned. The FlashChords header is hidden on this page. Clicking the mode button cycles through three modes:
 
 - **A → ●** (Name to Fingering) — shows the chord name, the user places dots on a blank interactive fretboard, then taps "Guess".
 - **A ← ●** (Fingering to Name) — shows a non-interactive fretboard with the correct fingering, the user picks from chord-name buttons.
 - **A ↔ ●** (Both) — randomly picks one of the above two modes for each card.
 
-The deck's chords are shuffled into a queue. Progress is displayed as "N / total". When the queue is exhausted, it reshuffles and starts over (infinite loop).
+The deck's chords are shuffled into a queue. When the queue is exhausted, it reshuffles and starts over (infinite loop).
 
 #### Name → Fingering feedback
 
@@ -63,7 +63,7 @@ Open and muted strings are compared but don't produce visible dots (only fretted
 
 #### Fingering → Name feedback
 
-The user sees buttons for every unique chord name in the deck. On a wrong guess, that button is disabled (grayed out) and "Try again!" appears — the user keeps guessing until correct. On correct, "Correct!" flashes for 600ms and auto-advances.
+The user sees buttons for every unique chord name in the deck. On a wrong guess, that button is disabled (grayed out) and "Try again!" appears as a centered overlay for 500ms then fades — the user keeps guessing until correct. On correct, "Correct!" flashes for 600ms and auto-advances.
 
 Switching modes mid-quiz resets to a fresh card.
 
@@ -142,7 +142,7 @@ QuizPage manages a shuffled queue of chord objects. The `feedback` state drives 
 - `null` — awaiting guess (show interactive fretboard or name buttons)
 - `'correct'` — show "Correct!" message, auto-advance after 600ms timeout
 - `'wrong'` — show feedback fretboard with colored dots, wait for manual "Next"
-- `'tryagain'` — (fingering→name mode only) wrong name chosen, disable that button, keep going
+- (fingering→name wrong guesses no longer set feedback state — instead `showTryAgain` triggers a temporary overlay)
 
 The `effectiveMode` state handles the "both" mode by randomly picking `name2fret` or `fret2name` on each new card. The actual quiz UI is split into two child components (`NameToFretQuiz` and `FretToNameQuiz`) to keep the render logic readable.
 

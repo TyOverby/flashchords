@@ -63,7 +63,7 @@ function isCorrect(guess, answer) {
 }
 
 export default function QuizPage({ deckId }) {
-  const [mode, setMode] = useState('name2fret');
+  const [modeIndex, setModeIndex] = useState(0);
   const [deck, setDeck] = useState(null);
   const [chords, setChords] = useState([]);
   const [queue, setQueue] = useState([]);
@@ -73,7 +73,15 @@ export default function QuizPage({ deckId }) {
   const [feedbackData, setFeedbackData] = useState(null);
   const [disabledNames, setDisabledNames] = useState(new Set());
   const [effectiveMode, setEffectiveMode] = useState('name2fret');
+  const [showTryAgain, setShowTryAgain] = useState(false);
   const timerRef = useRef(null);
+  const tryAgainTimerRef = useRef(null);
+
+  const mode = MODES[modeIndex].id;
+
+  const cycleMode = useCallback(() => {
+    setModeIndex(prev => (prev + 1) % MODES.length);
+  }, []);
 
   // Load deck and chords
   useEffect(() => {
@@ -99,10 +107,12 @@ export default function QuizPage({ deckId }) {
 
   const nextCard = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
+    if (tryAgainTimerRef.current) clearTimeout(tryAgainTimerRef.current);
     setFeedback(null);
     setFeedbackData(null);
     setGuess([...EMPTY_FINGERING]);
     setDisabledNames(new Set());
+    setShowTryAgain(false);
     if (currentIdx + 1 >= queue.length) {
       // Reshuffle
       setQueue(prev => shuffle(prev));
@@ -141,14 +151,19 @@ export default function QuizPage({ deckId }) {
       setFeedback('correct');
       timerRef.current = setTimeout(nextCard, 600);
     } else {
-      setFeedback('tryagain');
       setDisabledNames(prev => new Set([...prev, chordName]));
+      setShowTryAgain(true);
+      if (tryAgainTimerRef.current) clearTimeout(tryAgainTimerRef.current);
+      tryAgainTimerRef.current = setTimeout(() => setShowTryAgain(false), 500);
     }
   }, [currentChord, nextCard]);
 
-  // Cleanup timer
+  // Cleanup timers
   useEffect(() => {
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      if (tryAgainTimerRef.current) clearTimeout(tryAgainTimerRef.current);
+    };
   }, []);
 
   const uniqueNames = useMemo(() => {
@@ -173,25 +188,19 @@ export default function QuizPage({ deckId }) {
     `;
   }
 
-  const progress = `${(currentIdx % queue.length) + 1} / ${queue.length}`;
-
   return html`
     <div className="stack">
-      <a href="#/" className="back-link">← Back</a>
-
-      <div className="text-center text-muted" style=${{ marginBottom: 4 }}>${deck.name}</div>
-
-      <div className="mode-selector">
-        ${MODES.map(m => html`
-          <button key=${m.id}
-                  className=${`mode-btn ${mode === m.id ? 'active' : ''}`}
-                  onClick=${() => { setMode(m.id); nextCard(); }}>
-            ${m.label}
-          </button>
-        `)}
+      <div className="quiz-topbar">
+        <a href="#/" className="back-link" style=${{ marginBottom: 0 }}>← Back</a>
+        <span className="quiz-deck-name">${deck.name}</span>
+        <button className="mode-cycle-btn" onClick=${() => { cycleMode(); nextCard(); }}>
+          ${MODES[modeIndex].label}
+        </button>
       </div>
 
-      <div className="text-center text-muted" style=${{ fontSize: '0.8rem' }}>${progress}</div>
+      ${showTryAgain && html`
+        <div className="try-again-overlay">Try again!</div>
+      `}
 
       ${currentChord && effectiveMode === 'name2fret' && html`
         <${NameToFretQuiz}
@@ -212,7 +221,6 @@ export default function QuizPage({ deckId }) {
           feedback=${feedback}
           disabledNames=${disabledNames}
           onNameGuess=${handleNameGuess}
-          onNext=${nextCard}
         />
       `}
     </div>
@@ -258,26 +266,20 @@ function NameToFretQuiz({ chord, guess, feedback, feedbackData, onPositionChange
   `;
 }
 
-function FretToNameQuiz({ chord, names, feedback, disabledNames, onNameGuess, onNext }) {
+function FretToNameQuiz({ chord, names, feedback, disabledNames, onNameGuess }) {
   return html`
     <div className="stack text-center">
-      <div style=${{ fontSize: '1rem', color: 'var(--text-muted)' }}>What chord is this?</div>
-
       <${Fretboard} positions=${chord.fingering} interactive=${false} />
 
       ${feedback === 'correct' && html`
         <div className="feedback-correct">Correct!</div>
       `}
 
-      ${feedback === 'tryagain' && html`
-        <div className="feedback-wrong">Try again!</div>
-      `}
-
       ${feedback !== 'correct' && html`
         <div className="chip-grid" style=${{ justifyContent: 'center' }}>
           ${names.map(name => html`
             <button key=${name}
-                    className=${`chip ${disabledNames.has(name) ? '' : ''}`}
+                    className="chip"
                     disabled=${disabledNames.has(name)}
                     onClick=${() => onNameGuess(name)}>
               ${name}
