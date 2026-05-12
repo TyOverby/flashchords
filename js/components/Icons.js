@@ -10,7 +10,7 @@ function Icon({ d, size = 20, stroke = 'currentColor', strokeWidth = 2 }) {
     <span style=${iconStyle}>
       <svg width=${size} height=${size} viewBox="0 0 24 24" fill="none"
            stroke=${stroke} strokeWidth=${strokeWidth} strokeLinecap="round" strokeLinejoin="round">
-        ${d}
+        <g>${d}</g>
       </svg>
     </span>
   `;
