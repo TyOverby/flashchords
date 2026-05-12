@@ -1,6 +1,6 @@
 import { html, React } from '../deps.js';
 
-const { useState, useCallback } = React;
+const { useState, useCallback, useRef } = React;
 
 // Fretboard dimensions
 const PADDING_LEFT = 40;
@@ -42,8 +42,13 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
   const svgW = WIDTH * scale;
   const svgH = HEIGHT * scale;
 
+  const lastClickTime = useRef(0);
+
   const handleClick = useCallback((e) => {
     if (!interactive || !onPositionChange) return;
+    const now = Date.now();
+    if (now - lastClickTime.current < 300) return;
+    lastClickTime.current = now;
     const svg = e.currentTarget;
     const pt = svg.createSVGPoint();
     pt.x = e.clientX;
