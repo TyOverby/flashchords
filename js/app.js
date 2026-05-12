@@ -18,11 +18,10 @@ const pages = {
 
 function parseHash() {
   const hash = window.location.hash || '#/';
-  const [path, query] = hash.slice(1).split('?');
-  const parts = path.split('/').filter(Boolean);
-  const qp = new URLSearchParams(query || '');
+  const parts = hash.slice(2).split('/').filter(Boolean);
   if (parts.length === 0) return { page: 'home', params: {} };
-  if (parts[0] === 'chords') return { page: 'chords', params: { autoAdd: qp.has('add') } };
+  if (parts[0] === 'chords' && parts[1] === 'add') return { page: 'chords', params: { autoAdd: true } };
+  if (parts[0] === 'chords') return { page: 'chords', params: {} };
   if (parts[0] === 'deck' && parts[1] === 'create') return { page: 'deckCreate', params: {} };
   if (parts[0] === 'quiz' && parts[1]) return { page: 'quiz', params: { deckId: parts[1] } };
   return { page: 'home', params: {} };
