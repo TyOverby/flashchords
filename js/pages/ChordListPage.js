@@ -68,7 +68,7 @@ export default function ChordListPage() {
 
       <div className="stack">
         ${chords.map(chord => html`
-          <div key=${chord.id} className="row-between" style=${{ padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
+          <div key=${chord.id} className="row-between" style=${{ padding: '8px 0' }}>
             <div className="row">
               <${FretboardMini} positions=${chord.fingering} />
               <div style=${{ fontWeight: 'bold', fontSize: '1.1rem' }}>${chord.name}</div>
