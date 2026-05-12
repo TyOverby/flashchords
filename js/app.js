@@ -1,4 +1,4 @@
-import { React, ReactDOM, html } from './deps.js';
+import { React, html, createRoot } from './deps.js';
 import { seedIfNeeded } from './data/seedData.js';
 import HomePage from './pages/HomePage.js';
 import ChordListPage from './pages/ChordListPage.js';
@@ -52,5 +52,5 @@ function App() {
   `;
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById('root'));
 root.render(html`<${App} />`);
