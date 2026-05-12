@@ -92,7 +92,7 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
         height=${svgH}
         viewBox="0 0 ${WIDTH} ${HEIGHT}"
         onPointerUp=${handlePointerUp}
-        style=${{ cursor: interactive ? 'pointer' : 'default', touchAction: 'none' }}
+        style=${{ cursor: interactive ? 'pointer' : 'default', touchAction: interactive ? 'none' : 'auto' }}
       >
         <!-- Nut -->
         <line x1=${stringX(0)} y1=${NUT_Y} x2=${stringX(NUM_STRINGS-1)} y2=${NUT_Y}
