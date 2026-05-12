@@ -3,19 +3,15 @@ import { getAllChords, addChord, deleteChord } from '../data/chordStore.js';
 import Fretboard, { FretboardMini } from '../components/Fretboard.js';
 import { TrashIcon, PlusIcon, XIcon, CheckIcon, EraserIcon, ArrowLeftIcon } from '../components/Icons.js';
 
-const { useState, useCallback, useEffect } = React;
+const { useState, useCallback } = React;
 
 const EMPTY_FINGERING = [null, null, null, null, null, null];
 
-export default function ChordListPage({ autoAdd = false }) {
+export default function ChordListPage() {
   const [chords, setChords] = useState(() => getAllChords());
   const [name, setName] = useState('');
   const [fingering, setFingering] = useState([...EMPTY_FINGERING]);
-  const [showAdd, setShowAdd] = useState(autoAdd);
-
-  useEffect(() => {
-    if (autoAdd) setShowAdd(true);
-  }, [autoAdd]);
+  const [showAdd, setShowAdd] = useState(() => window.location.hash.includes('/chords/add'));
 
   const handlePositionChange = useCallback((stringIndex, value) => {
     setFingering(prev => {
