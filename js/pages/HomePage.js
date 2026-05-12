@@ -58,7 +58,7 @@ export default function HomePage() {
 
       <section>
         <div className="row-between" style=${{ marginBottom: 8 }}>
-          <h2 style=${{ margin: 0 }}>Decks</h2>
+          <h2 style=${{ margin: 0 }}>Quizzes</h2>
           <button className="icon-btn" title="New deck" onClick=${() => { window.location.hash = '#/deck/create'; }}><${PlusIcon} size=${18} /></button>
         </div>
 
