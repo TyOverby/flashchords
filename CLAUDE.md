@@ -55,9 +55,9 @@ The deck's chords are shuffled into a queue. When the queue is exhausted, it res
 #### Name → Fingering feedback
 
 On guess, each string is compared independently:
-- **Green dot** — user's fret matches the answer.
-- **Red dot** — user placed a dot on the wrong fret.
-- **Black dot** (with gray outline) — the correct fret the user missed.
+- **Solid green dot** — user's fret matches the answer.
+- **Solid red dot** — the correct fret the user missed.
+- **Red outline dot** (non-filled) — where the user placed a wrong guess.
 
 Open and muted strings are compared but don't produce visible dots (only fretted positions show dots). If correct, "Correct!" flashes for 600ms then auto-advances. If wrong, the feedback fretboard stays visible with a "Not quite!" message and a "Next" button.
 

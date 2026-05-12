@@ -40,13 +40,13 @@ function buildFeedback(guess, answer) {
         dots.push({ fret: a, color: 'green' });
       }
     } else {
-      // Show the wrong guess in red
+      // Show the wrong guess as a red outline
       if (g !== null && g !== "X" && g > 0) {
-        dots.push({ fret: g, color: 'red' });
+        dots.push({ fret: g, color: 'red-outline' });
       }
-      // Show the correct answer in black (missing)
+      // Show the correct answer as solid red
       if (a !== null && a !== "X" && a > 0) {
-        dots.push({ fret: a, color: 'black' });
+        dots.push({ fret: a, color: 'red' });
       }
     }
     feedbackDots.push(dots);

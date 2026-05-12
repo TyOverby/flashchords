@@ -33,7 +33,7 @@ function fretY(fret) {
 //
 // displayMode: null (interactive/static) or "feedback"
 // feedbackData: array of 6 arrays, each containing { fret, color } objects
-//   colors: "green" = correct, "red" = wrong, "black" = missing
+//   colors: "green" = correct, "red" = correct answer (missed), "red-outline" = wrong guess
 // interactive: whether clicking changes positions
 // size: "normal" or "small" for thumbnails
 
@@ -148,10 +148,15 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
         ${displayMode === "feedback" && feedbackData && feedbackData.map((stringDots, i) => {
           if (!stringDots) return null;
           return stringDots.map((dot, j) => {
-            const colors = { green: "#5a7a4a", red: "#a04030", black: "#3b2a1a" };
+            if (dot.color === 'red-outline') {
+              return html`<circle key=${"fb-"+i+"-"+j} cx=${stringX(i)} cy=${fretY(dot.fret)}
+                                  r=${DOT_RADIUS} fill="none"
+                                  stroke="#a04030" strokeWidth="2" />`;
+            }
+            const colors = { green: "#5a7a4a", red: "#a04030" };
             return html`<circle key=${"fb-"+i+"-"+j} cx=${stringX(i)} cy=${fretY(dot.fret)}
-                                r=${DOT_RADIUS} fill=${colors[dot.color] || "#3b2a1a"}
-                                stroke=${dot.color === "black" ? "#8c7a6b" : "none"} strokeWidth="1.5" />`;
+                                r=${DOT_RADIUS} fill=${colors[dot.color] || "#a04030"}
+                                stroke="none" strokeWidth="0" />`;
           });
         })}
       </svg>
