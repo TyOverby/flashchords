@@ -71,18 +71,17 @@ function toFret(pos) {
 export function playChord(fingering, stagger = 25) {
   const ctx = ensureContext();
   dampening = 0.99;
+  ctx.resume();
 
-  ctx.resume().then(() => {
-    const dst = ctx.destination;
-    for (let i = 0; i < 6; i++) {
-      const fret = toFret(fingering[i]);
-      if (fret !== null) {
-        setTimeout(() => {
-          pluck(getFrequency(i, fret)).connect(dst);
-        }, stagger * i);
-      }
+  const dst = ctx.destination;
+  for (let i = 0; i < 6; i++) {
+    const fret = toFret(fingering[i]);
+    if (fret !== null) {
+      setTimeout(() => {
+        pluck(getFrequency(i, fret)).connect(dst);
+      }, stagger * i);
     }
-  });
+  }
 }
 
 /**
@@ -96,8 +95,7 @@ export function playString(stringIndex, fretValue) {
 
   const ctx = ensureContext();
   dampening = 0.99;
+  ctx.resume();
 
-  ctx.resume().then(() => {
-    pluck(getFrequency(stringIndex, fret)).connect(ctx.destination);
-  });
+  pluck(getFrequency(stringIndex, fret)).connect(ctx.destination);
 }
