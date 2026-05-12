@@ -160,6 +160,7 @@ export default function QuizPage({ deckId }) {
 
   const handleGuess = useCallback(() => {
     if (!currentChord) return;
+    playChord(guess);
     const correct = isCorrect(guess, currentChord.fingering);
     if (correct) {
       setFeedback('correct');
