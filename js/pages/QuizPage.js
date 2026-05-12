@@ -23,17 +23,29 @@ function shuffle(arr) {
 }
 
 function buildFeedback(guess, answer) {
-  // Returns feedbackData: array of 6 arrays of { fret, color }
-  const feedback = [];
+  // Returns { feedbackDots, feedbackMarkers }
+  // feedbackDots: array of 6 arrays of { fret, color } (fret dot feedback)
+  // feedbackMarkers: array of 6 (null | array of { type, color }) (above-nut marker feedback)
+  const feedbackDots = [];
+  const feedbackMarkers = [];
   for (let s = 0; s < 6; s++) {
     const dots = [];
     const g = normalizePos(guess[s]);
     const a = normalizePos(answer[s]);
 
+    const gIsAboveNut = g === null || g === "X";
+    const aIsAboveNut = a === null || a === "X";
+
     if (g === a) {
       // Correct — show green if there's a fret dot
       if (a !== null && a !== "X" && a > 0) {
         dots.push({ fret: a, color: 'green' });
+      }
+      // Green above-nut marker for correct open/mute
+      if (gIsAboveNut) {
+        feedbackMarkers.push([{ type: g === "X" ? 'mute' : 'open', color: 'green' }]);
+      } else {
+        feedbackMarkers.push(null);
       }
     } else {
       // Show the wrong guess in red
@@ -44,10 +56,19 @@ function buildFeedback(guess, answer) {
       if (a !== null && a !== "X" && a > 0) {
         dots.push({ fret: a, color: 'black' });
       }
+      // Above-nut markers: red for wrong guess, black for correct answer
+      const markers = [];
+      if (gIsAboveNut) {
+        markers.push({ type: g === "X" ? 'mute' : 'open', color: 'red' });
+      }
+      if (aIsAboveNut) {
+        markers.push({ type: a === "X" ? 'mute' : 'open', color: 'black' });
+      }
+      feedbackMarkers.push(markers.length > 0 ? markers : null);
     }
-    feedback.push(dots);
+    feedbackDots.push(dots);
   }
-  return feedback;
+  return { feedbackDots, feedbackMarkers };
 }
 
 function normalizePos(p) {
@@ -71,6 +92,7 @@ export default function QuizPage({ deckId }) {
   const [guess, setGuess] = useState([...EMPTY_FINGERING]);
   const [feedback, setFeedback] = useState(null); // null | 'correct' | 'wrong'
   const [feedbackData, setFeedbackData] = useState(null);
+  const [feedbackMarkers, setFeedbackMarkers] = useState(null);
   const [disabledNames, setDisabledNames] = useState(new Set());
   const [effectiveMode, setEffectiveMode] = useState('name2fret');
   const [showTryAgain, setShowTryAgain] = useState(false);
@@ -110,6 +132,7 @@ export default function QuizPage({ deckId }) {
     if (tryAgainTimerRef.current) clearTimeout(tryAgainTimerRef.current);
     setFeedback(null);
     setFeedbackData(null);
+    setFeedbackMarkers(null);
     setGuess([...EMPTY_FINGERING]);
     setDisabledNames(new Set());
     setShowTryAgain(false);
@@ -140,7 +163,9 @@ export default function QuizPage({ deckId }) {
       timerRef.current = setTimeout(nextCard, 600);
     } else {
       setFeedback('wrong');
-      setFeedbackData(buildFeedback(guess, currentChord.fingering));
+      const result = buildFeedback(guess, currentChord.fingering);
+      setFeedbackData(result.feedbackDots);
+      setFeedbackMarkers(result.feedbackMarkers);
     }
   }, [guess, currentChord, nextCard]);
 
@@ -208,6 +233,7 @@ export default function QuizPage({ deckId }) {
           guess=${guess}
           feedback=${feedback}
           feedbackData=${feedbackData}
+          feedbackMarkers=${feedbackMarkers}
           onPositionChange=${handlePositionChange}
           onGuess=${handleGuess}
           onNext=${nextCard}
@@ -227,7 +253,7 @@ export default function QuizPage({ deckId }) {
   `;
 }
 
-function NameToFretQuiz({ chord, guess, feedback, feedbackData, onPositionChange, onGuess, onNext }) {
+function NameToFretQuiz({ chord, guess, feedback, feedbackData, feedbackMarkers, onPositionChange, onGuess, onNext }) {
   return html`
     <div className="stack text-center">
       <div style=${{ fontSize: '2rem', fontWeight: 'bold' }}>${chord.name}</div>
@@ -249,6 +275,7 @@ function NameToFretQuiz({ chord, guess, feedback, feedbackData, onPositionChange
           positions=${guess}
           displayMode="feedback"
           feedbackData=${feedbackData}
+          feedbackMarkers=${feedbackMarkers}
         />
       `}
 
