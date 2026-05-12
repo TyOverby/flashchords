@@ -1,16 +1,19 @@
 import { React, ReactDOM, html } from './deps.js';
 import { seedIfNeeded } from './data/seedData.js';
+import HomePage from './pages/HomePage.js';
+import ChordListPage from './pages/ChordListPage.js';
+import DeckCreatePage from './pages/DeckCreatePage.js';
+import QuizPage from './pages/QuizPage.js';
 
 seedIfNeeded();
 
-const { useState, useEffect, useRef } = React;
+const { useState, useEffect } = React;
 
-// Lazy imports for pages
-const pageModules = {
-  home: () => import('./pages/HomePage.js'),
-  chords: () => import('./pages/ChordListPage.js'),
-  deckCreate: () => import('./pages/DeckCreatePage.js'),
-  quiz: () => import('./pages/QuizPage.js'),
+const pages = {
+  home: HomePage,
+  chords: ChordListPage,
+  deckCreate: DeckCreatePage,
+  quiz: QuizPage,
 };
 
 function parseHash() {
@@ -25,8 +28,6 @@ function parseHash() {
 
 function App() {
   const [route, setRoute] = useState(parseHash);
-  const [PageComponent, setPageComponent] = useState(null);
-  const pageCache = useRef({});
 
   useEffect(() => {
     const onHashChange = () => setRoute(parseHash());
@@ -34,21 +35,7 @@ function App() {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
-  useEffect(() => {
-    const cached = pageCache.current[route.page];
-    if (cached) {
-      setPageComponent(() => cached);
-      return;
-    }
-    setPageComponent(null);
-    const loader = pageModules[route.page];
-    if (loader) {
-      loader().then(mod => {
-        pageCache.current[route.page] = mod.default;
-        setPageComponent(() => mod.default);
-      });
-    }
-  }, [route.page]);
+  const PageComponent = pages[route.page];
 
   return html`
     <div>

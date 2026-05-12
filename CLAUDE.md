@@ -106,7 +106,7 @@ The app uses native ES modules with an importmap in index.html pointing to esm.s
 
 ### Hash-based routing
 
-`app.js` implements a minimal router: it parses `window.location.hash` and maps it to a page component. Pages are lazy-loaded via dynamic `import()` so only the current page's module is fetched. Route params (like `deckId`) are spread as props onto the page component.
+`app.js` implements a minimal router: it parses `window.location.hash` and maps it to a page component. All pages are eagerly imported at startup so the app works fully offline with no async loading. Route params (like `deckId`) are spread as props onto the page component.
 
 Routes: `#/` (home), `#/chords`, `#/deck/create`, `#/quiz/:deckId`.
 
