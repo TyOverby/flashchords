@@ -43,10 +43,10 @@ export default function HomePage() {
         <div className="stack">
           ${decks.map(deck => html`
             <div key=${deck.id} className="row-between" style=${{ padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
-              <div style=${{ flex: 1 }}>
+              <a href=${`#/quiz/${deck.id}`} style=${{ flex: 1, textDecoration: 'none', color: 'inherit' }}>
                 <div style=${{ fontWeight: 'bold' }}>${deck.name}</div>
                 <div className="text-muted">${deck.chordIds.length} chord${deck.chordIds.length !== 1 ? 's' : ''}</div>
-              </div>
+              </a>
               <div className="row">
                 <a href=${`#/quiz/${deck.id}`}>
                   <button className="secondary" style=${{ fontSize: '0.85rem', padding: '6px 12px' }}>Quiz</button>
