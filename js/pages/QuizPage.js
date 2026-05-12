@@ -23,8 +23,11 @@ function shuffle(arr) {
 }
 
 function buildFeedback(guess, answer) {
-  // Returns feedbackData: array of 6 arrays of { fret, color }
-  const feedback = [];
+  // Returns { feedbackDots, muteMarkers }
+  // feedbackDots: array of 6 arrays of { fret, color } (fret dot feedback)
+  // muteMarkers: array of 6 (null | 'wrong-mute' | 'missed-mute')
+  const feedbackDots = [];
+  const muteMarkers = [];
   for (let s = 0; s < 6; s++) {
     const dots = [];
     const g = normalizePos(guess[s]);
@@ -45,9 +48,20 @@ function buildFeedback(guess, answer) {
         dots.push({ fret: a, color: 'black' });
       }
     }
-    feedback.push(dots);
+    feedbackDots.push(dots);
+
+    // Mute feedback: only about whether the string is muted or not
+    const gMuted = g === "X";
+    const aMuted = a === "X";
+    if (gMuted && !aMuted) {
+      muteMarkers.push('wrong-mute');
+    } else if (!gMuted && aMuted) {
+      muteMarkers.push('missed-mute');
+    } else {
+      muteMarkers.push(null);
+    }
   }
-  return feedback;
+  return { feedbackDots, muteMarkers };
 }
 
 function normalizePos(p) {
@@ -71,6 +85,7 @@ export default function QuizPage({ deckId }) {
   const [guess, setGuess] = useState([...EMPTY_FINGERING]);
   const [feedback, setFeedback] = useState(null); // null | 'correct' | 'wrong'
   const [feedbackData, setFeedbackData] = useState(null);
+  const [muteMarkers, setMuteMarkers] = useState(null);
   const [disabledNames, setDisabledNames] = useState(new Set());
   const [effectiveMode, setEffectiveMode] = useState('name2fret');
   const [showTryAgain, setShowTryAgain] = useState(false);
@@ -110,6 +125,7 @@ export default function QuizPage({ deckId }) {
     if (tryAgainTimerRef.current) clearTimeout(tryAgainTimerRef.current);
     setFeedback(null);
     setFeedbackData(null);
+    setMuteMarkers(null);
     setGuess([...EMPTY_FINGERING]);
     setDisabledNames(new Set());
     setShowTryAgain(false);
@@ -140,7 +156,9 @@ export default function QuizPage({ deckId }) {
       timerRef.current = setTimeout(nextCard, 600);
     } else {
       setFeedback('wrong');
-      setFeedbackData(buildFeedback(guess, currentChord.fingering));
+      const result = buildFeedback(guess, currentChord.fingering);
+      setFeedbackData(result.feedbackDots);
+      setMuteMarkers(result.muteMarkers);
     }
   }, [guess, currentChord, nextCard]);
 
@@ -208,6 +226,7 @@ export default function QuizPage({ deckId }) {
           guess=${guess}
           feedback=${feedback}
           feedbackData=${feedbackData}
+          muteMarkers=${muteMarkers}
           onPositionChange=${handlePositionChange}
           onGuess=${handleGuess}
           onNext=${nextCard}
@@ -227,7 +246,7 @@ export default function QuizPage({ deckId }) {
   `;
 }
 
-function NameToFretQuiz({ chord, guess, feedback, feedbackData, onPositionChange, onGuess, onNext }) {
+function NameToFretQuiz({ chord, guess, feedback, feedbackData, muteMarkers, onPositionChange, onGuess, onNext }) {
   return html`
     <div className="stack text-center">
       <div style=${{ fontSize: '2rem', fontWeight: 'bold' }}>${chord.name}</div>
@@ -249,6 +268,7 @@ function NameToFretQuiz({ chord, guess, feedback, feedbackData, onPositionChange
           positions=${guess}
           displayMode="feedback"
           feedbackData=${feedbackData}
+          muteMarkers=${muteMarkers}
         />
       `}
 

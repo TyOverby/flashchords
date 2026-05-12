@@ -37,7 +37,7 @@ function fretY(fret) {
 // interactive: whether clicking changes positions
 // size: "normal" or "small" for thumbnails
 
-export default function Fretboard({ positions = [null,null,null,null,null,null], onPositionChange, displayMode, feedbackData, interactive = false, size = "normal" }) {
+export default function Fretboard({ positions = [null,null,null,null,null,null], onPositionChange, displayMode, feedbackData, muteMarkers, interactive = false, size = "normal" }) {
   const scale = size === "small" ? 0.45 : 1;
   const svgW = WIDTH * scale;
   const svgH = HEIGHT * scale;
@@ -116,16 +116,25 @@ export default function Fretboard({ positions = [null,null,null,null,null,null],
         ${positions.map((pos, i) => {
           const x = stringX(i);
           const y = NUT_Y - 14;
+          const mute = muteMarkers ? muteMarkers[i] : null;
           if (pos === "X") {
+            const fill = mute === 'wrong-mute' ? '#f44336' : '#999';
             return html`<text key=${"mark-"+i} x=${x} y=${y} textAnchor="middle"
-                              fontSize="14" fontWeight="bold" fill="#f44"
+                              fontSize="14" fontWeight="bold" fill=${fill}
                               dominantBaseline="middle">X</text>`;
           }
+          const elements = [];
           if (pos === null || pos === 0) {
-            return html`<circle key=${"mark-"+i} cx=${x} cy=${y} r="6"
-                                fill="none" stroke="#aaa" strokeWidth="1.5" />`;
+            elements.push(html`<circle key=${"mark-"+i} cx=${x} cy=${y} r="6"
+                                fill="none" stroke="#aaa" strokeWidth="1.5" />`);
           }
-          return null;
+          if (mute === 'missed-mute') {
+            elements.push(html`<text key=${"missed-"+i} x=${x + (elements.length ? 10 : 0)} y=${y}
+                                    textAnchor="middle" fontSize="14" fontWeight="bold"
+                                    fill="#333" stroke="#999" strokeWidth="0.5"
+                                    dominantBaseline="middle">X</text>`);
+          }
+          return elements.length ? elements : null;
         })}
 
         <!-- Finger dots (normal mode) -->
