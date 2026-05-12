@@ -83,7 +83,7 @@ export default function HomePage() {
 
       <section>
         <h2 style=${{ margin: '0 0 8px' }}>Storage</h2>
-        <div className="row" style=${{ gap: 12, justifyContent: 'center' }}>
+        <div className="row" style=${{ gap: 12 }}>
           <button className="icon-btn-labeled" onClick=${exportData} title="Download data as JSON">
             <${DownloadIcon} size=${18} />
             <span>Export</span>
