@@ -1,4 +1,7 @@
 import { React, ReactDOM, html } from './deps.js';
+import { seedIfNeeded } from './data/seedData.js';
+
+seedIfNeeded();
 
 const { useState, useEffect } = React;
 
