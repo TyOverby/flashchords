@@ -3,7 +3,7 @@ import { seedIfNeeded } from './data/seedData.js';
 
 seedIfNeeded();
 
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
 // Lazy imports for pages
 const pageModules = {
@@ -26,6 +26,7 @@ function parseHash() {
 function App() {
   const [route, setRoute] = useState(parseHash);
   const [PageComponent, setPageComponent] = useState(null);
+  const pageCache = useRef({});
 
   useEffect(() => {
     const onHashChange = () => setRoute(parseHash());
@@ -34,10 +35,16 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const cached = pageCache.current[route.page];
+    if (cached) {
+      setPageComponent(() => cached);
+      return;
+    }
     setPageComponent(null);
     const loader = pageModules[route.page];
     if (loader) {
       loader().then(mod => {
+        pageCache.current[route.page] = mod.default;
         setPageComponent(() => mod.default);
       });
     }
