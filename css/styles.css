@@ -83,6 +83,31 @@ button.danger {
   padding: 6px 12px;
 }
 
+button.icon-btn {
+  background: none;
+  color: var(--text-muted);
+  padding: 6px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+button.icon-btn:active {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+button.icon-btn.danger {
+  color: var(--error);
+  background: none;
+}
+
+button.icon-btn.danger:active {
+  background: var(--surface-hover);
+}
+
 input[type="text"] {
   font-family: inherit;
   font-size: 1rem;

@@ -2,6 +2,7 @@ import { React, html } from '../deps.js';
 import { getDeck } from '../data/deckStore.js';
 import { getChord } from '../data/chordStore.js';
 import Fretboard from '../components/Fretboard.js';
+import { ArrowLeftIcon, ArrowRightIcon } from '../components/Icons.js';
 
 const { useState, useCallback, useEffect, useMemo, useRef } = React;
 
@@ -191,7 +192,7 @@ export default function QuizPage({ deckId }) {
   if (!deck) {
     return html`
       <div className="stack">
-        <a href="#/" className="back-link">← Back</a>
+        <a href="#/" className="back-link"><${ArrowLeftIcon} size=${16} /> Back</a>
         <p className="text-center text-muted">Deck not found.</p>
       </div>
     `;
@@ -200,7 +201,7 @@ export default function QuizPage({ deckId }) {
   if (chords.length === 0) {
     return html`
       <div className="stack">
-        <a href="#/" className="back-link">← Back</a>
+        <a href="#/" className="back-link"><${ArrowLeftIcon} size=${16} /> Back</a>
         <p className="text-center text-muted">This deck has no valid chords.</p>
       </div>
     `;
@@ -209,7 +210,7 @@ export default function QuizPage({ deckId }) {
   return html`
     <div className="stack">
       <div className="quiz-topbar">
-        <a href="#/" className="back-link" style=${{ marginBottom: 0 }}>← Back</a>
+        <a href="#/" className="back-link" style=${{ marginBottom: 0 }}><${ArrowLeftIcon} size=${16} /> Back</a>
         <span className="quiz-deck-name">${deck.name}</span>
         <button className="mode-cycle-btn" onClick=${() => { cycleMode(); nextCard(); }}>
           ${MODES[modeIndex].label}

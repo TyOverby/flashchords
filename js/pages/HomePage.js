@@ -2,6 +2,7 @@ import { React, html } from '../deps.js';
 import { getAllDecks, deleteDeck } from '../data/deckStore.js';
 import { getAllChords } from '../data/chordStore.js';
 import { exportData } from '../data/exportImport.js';
+import { PencilIcon, PlusIcon, TrashIcon, DownloadIcon } from '../components/Icons.js';
 
 const { useState, useCallback } = React;
 
@@ -20,9 +21,10 @@ export default function HomePage() {
       <section>
         <div className="row-between" style=${{ marginBottom: 8 }}>
           <h2 style=${{ margin: 0 }}>Chords</h2>
-          <div className="row">
+          <span className="text-muted">${chords.length}</span>
+          <div className="row" style=${{ gap: 4 }}>
             <a href="#/chords">
-              <button className="secondary">Manage Chords (${chords.length})</button>
+              <button className="icon-btn" title="Edit chords"><${PencilIcon} size=${18} /></button>
             </a>
           </div>
         </div>
@@ -32,7 +34,7 @@ export default function HomePage() {
         <div className="row-between" style=${{ marginBottom: 8 }}>
           <h2 style=${{ margin: 0 }}>Decks</h2>
           <a href="#/deck/create">
-            <button>+ New Deck</button>
+            <button className="icon-btn" title="New deck"><${PlusIcon} size=${18} /></button>
           </a>
         </div>
 
@@ -47,20 +49,17 @@ export default function HomePage() {
                 <div style=${{ fontWeight: 'bold' }}>${deck.name}</div>
                 <div className="text-muted">${deck.chordIds.length} chord${deck.chordIds.length !== 1 ? 's' : ''}</div>
               </a>
-              <div className="row">
-                <a href=${`#/quiz/${deck.id}`}>
-                  <button className="secondary" style=${{ fontSize: '0.85rem', padding: '6px 12px' }}>Quiz</button>
-                </a>
-                <button className="danger" onClick=${() => handleDeleteDeck(deck.id)}>Delete</button>
-              </div>
+              <button className="icon-btn danger" onClick=${() => handleDeleteDeck(deck.id)} title="Delete deck">
+                <${TrashIcon} size=${16} />
+              </button>
             </div>
           `)}
         </div>
       </section>
 
       <div style=${{ textAlign: 'center', marginTop: 8 }}>
-        <button className="secondary" onClick=${exportData} style=${{ fontSize: '0.85rem' }}>
-          Export Data (JSON)
+        <button className="icon-btn" onClick=${exportData} title="Export data as JSON">
+          <${DownloadIcon} size=${18} />
         </button>
       </div>
     </div>

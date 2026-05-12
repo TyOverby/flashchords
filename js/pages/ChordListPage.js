@@ -1,6 +1,7 @@
 import { React, html } from '../deps.js';
 import { getAllChords, addChord, deleteChord } from '../data/chordStore.js';
 import Fretboard, { FretboardMini } from '../components/Fretboard.js';
+import { TrashIcon, PlusIcon, XIcon, CheckIcon, EraserIcon, ArrowLeftIcon } from '../components/Icons.js';
 
 const { useState, useCallback } = React;
 
@@ -37,11 +38,11 @@ export default function ChordListPage() {
 
   return html`
     <div className="stack">
-      <a href="#/" className="back-link">← Back</a>
+      <a href="#/" className="back-link"><${ArrowLeftIcon} size=${16} /> Back</a>
       <div className="row-between">
         <h2>Chords (${chords.length})</h2>
-        <button onClick=${() => setShowAdd(!showAdd)}>
-          ${showAdd ? 'Cancel' : '+ Add Chord'}
+        <button className="icon-btn" onClick=${() => setShowAdd(!showAdd)} title=${showAdd ? 'Cancel' : 'Add chord'}>
+          ${showAdd ? html`<${XIcon} size=${18} />` : html`<${PlusIcon} size=${18} />`}
         </button>
       </div>
 
@@ -55,8 +56,8 @@ export default function ChordListPage() {
             interactive=${true}
           />
           <div className="row">
-            <button onClick=${handleSave} disabled=${!name.trim()}>Save Chord</button>
-            <button className="secondary" onClick=${() => setFingering([...EMPTY_FINGERING])}>Clear</button>
+            <button onClick=${handleSave} disabled=${!name.trim()}><${CheckIcon} size=${16} /> Save</button>
+            <button className="secondary" onClick=${() => setFingering([...EMPTY_FINGERING])}><${EraserIcon} size=${16} /> Clear</button>
           </div>
         </div>
       `}
@@ -72,7 +73,7 @@ export default function ChordListPage() {
               <${FretboardMini} positions=${chord.fingering} />
               <div style=${{ fontWeight: 'bold', fontSize: '1.1rem' }}>${chord.name}</div>
             </div>
-            <button className="danger" onClick=${() => handleDelete(chord.id)}>Delete</button>
+            <button className="icon-btn danger" onClick=${() => handleDelete(chord.id)} title="Delete chord"><${TrashIcon} size=${16} /></button>
           </div>
         `)}
       </div>

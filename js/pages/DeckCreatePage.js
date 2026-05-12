@@ -2,6 +2,7 @@ import { React, html } from '../deps.js';
 import { getAllChords } from '../data/chordStore.js';
 import { addDeck } from '../data/deckStore.js';
 import { FretboardMini } from '../components/Fretboard.js';
+import { ArrowLeftIcon } from '../components/Icons.js';
 
 const { useState, useMemo, useCallback } = React;
 
@@ -42,7 +43,7 @@ export default function DeckCreatePage() {
 
   return html`
     <div className="stack">
-      <a href="#/" className="back-link">← Back</a>
+      <a href="#/" className="back-link"><${ArrowLeftIcon} size=${16} /> Back</a>
       <h2>Create Deck</h2>
 
       <input type="text" placeholder=${autoName || "Deck name"}
