@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#6b4c3b"/>
+  <!-- Guitar pick shape -->
+  <path d="M256 80c-60 0-110 20-110 70 0 80 70 200 110 280 40-80 110-200 110-280 0-50-50-70-110-70z" fill="#f0ece4" opacity="0.9"/>
+  <!-- Simplified chord dots (3 dots like a chord) -->
+  <circle cx="230" cy="200" r="18" fill="#6b4c3b"/>
+  <circle cx="270" cy="250" r="18" fill="#6b4c3b"/>
+  <circle cx="250" cy="310" r="18" fill="#6b4c3b"/>
+</svg>

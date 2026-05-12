@@ -76,6 +76,12 @@ On first load (or if localStorage is empty), 8 common open chords are seeded: C,
 
 ```
 index.html              Entry point, loads React/htm via CDN importmap
+manifest.json           Web app manifest for PWA / Add to Home Screen
+icons/
+  icon.svg              Vector app icon (guitar pick with chord dots)
+  icon-192.png          192px PNG icon (manifest)
+  icon-512.png          512px PNG icon (manifest)
+  apple-touch-icon.png  180px PNG icon (iOS home screen)
 css/styles.css          All styles, light theme (off-grey/dark-brown) with CSS custom properties
 js/
   deps.js               Shared imports: React, ReactDOM, htm → html tagged template
